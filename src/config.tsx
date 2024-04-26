@@ -16,12 +16,16 @@ const databases = new Databases(client);
 
 //This returns a list of blogs
 export async function listAllBlog() {
-  const response = await databases.listDocuments(
-    appWriteConfig.databasesId,
-    appWriteConfig.blogCollectionId,
-  );
-  console.log(response); // Add this line to verify the response
-  return response;
+  try {
+    const response = await databases.listDocuments(
+      appWriteConfig.databasesId,
+      appWriteConfig.blogCollectionId,
+    );
+    console.log(response); // Verify the response
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 //This returns a specific blog from its id

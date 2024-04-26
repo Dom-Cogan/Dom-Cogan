@@ -1,8 +1,7 @@
-import { component$, useStore, useTask$ } from "@builder.io/qwik";
+import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { listAllBlog } from "~/config";
 import Overview from "~/components/page/overview";
-import { type Models } from "appwrite";
 
 interface BlogPost {
   id: string;
@@ -15,17 +14,15 @@ export default component$(() => {
     blogPosts: [],
   });
 
-  useTask$(async () => {
+  useVisibleTask$(async () => {
     try {
       const response = await listAllBlog();
-      const blogPosts: BlogPost[] = response.documents.map(
-        (doc: Models.Document) => ({
-          id: doc.$id,
-          title: doc.title,
-          overview: doc.overview,
-        }),
-      );
-      blogPostsStore.blogPosts = blogPosts;
+      const blogPosts = response?.documents.map((doc) => ({
+        id: doc.$id,
+        title: doc.title,
+        overview: doc.overview,
+      }));
+      blogPostsStore.blogPosts = blogPosts ?? [];
     } catch (error) {
       console.error(error);
     }

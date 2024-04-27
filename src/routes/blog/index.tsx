@@ -41,11 +41,7 @@ export default component$(() => {
           />
         ))
       ) : (
-<<<<<<< Updated upstream
-        <p>Loading blog posts...</p>
-=======
-        <div class={styles.construction}></div>
->>>>>>> Stashed changes
+        <div class={styles.construction}>Loading blog posts...</div>
       )}
     </div>
   );

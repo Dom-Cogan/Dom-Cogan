@@ -30,18 +30,14 @@ export default component$(() => {
 
   return (
     <div>
-      {blogPostsStore.blogPosts.length > 0 ? (
-        blogPostsStore.blogPosts.map((post) => (
-          <Overview
-            key={post.id}
-            title={post.title}
-            id={post.id}
-            description={post.overview}
-          />
-        ))
-      ) : (
-        <p>Loading blog posts...</p>
-      )}
+      {blogPostsStore.blogPosts.map((post) => (
+        <Overview
+          key={post.id}
+          title={post.title}
+          id={post.id}
+          description={post.overview}
+        />
+      ))}
     </div>
   );
 });

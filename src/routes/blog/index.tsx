@@ -2,6 +2,7 @@ import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { listAllBlog } from "~/config";
 import Overview from "~/components/page/overview";
+import * as styles from "../../styleY";
 
 interface BlogPost {
   id: string;
@@ -40,7 +41,11 @@ export default component$(() => {
           />
         ))
       ) : (
+<<<<<<< Updated upstream
         <p>Loading blog posts...</p>
+=======
+        <div class={styles.construction}></div>
+>>>>>>> Stashed changes
       )}
     </div>
   );

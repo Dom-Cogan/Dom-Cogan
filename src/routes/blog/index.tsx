@@ -3,6 +3,7 @@ import { type DocumentHead } from "@builder.io/qwik-city";
 import { listAllBlog } from "~/config";
 import Overview from "~/components/page/overview";
 import * as styles from "../../styleY";
+import Loading from "~/components/loading";
 
 interface BlogPost {
   id: string;
@@ -30,7 +31,7 @@ export default component$(() => {
   });
 
   return (
-    <div>
+    <div class={styles.paper}>
       {blogPostsStore.blogPosts.length > 0 ? (
         blogPostsStore.blogPosts.map((post) => (
           <Overview
@@ -41,7 +42,7 @@ export default component$(() => {
           />
         ))
       ) : (
-        <div class={styles.construction}>Loading blog posts...</div>
+        <Loading message="List of blogs" />
       )}
     </div>
   );

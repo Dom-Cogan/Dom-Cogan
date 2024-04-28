@@ -16,10 +16,12 @@ export const rootPage = [
   "overflow-hidden",
   "scrollbar-hidden",
 ];
+
 export const page = [
-  "p-4",
   "flex",
-  "mt-4",
+  "lg:p-8",
+  "lg:px-12",
+  "min-w-[300px]",
   "w-full",
   "flex-col",
   "h-screen",
@@ -30,23 +32,54 @@ export const page = [
 ];
 
 export const paper = [
-  "m-8",
-  "mx-12",
+  "p-1.5",
+  "md:p-4",
+  "h-full",
   "max-w-2xl",
   "overflow-scroll",
   "scrollbar-hidden",
   "overflow-x-hidden",
 ];
 
-export const header = [
-  "m-4",
-  "font-semibold",
+export const base = [
+  "w-screen",
+  "h-screen",
+  "flex",
+  "items-center",
+  "flex-col",
+  "justify-center",
+];
+
+export const paragraph = [
+  "flex",
+  "cursor-default",
   "text-2xl",
-  "italic",
-  "text-align: center",
+  "px-20",
   "text-center",
+  "items-center",
+  "pb-4",
+  "justify-center",
+  "select-none",
+];
+
+export const header = [
+  "italic",
+  "text-2xl",
+  "text-center",
+  "font-semibold",
+  "text-align: center",
+];
+
+export const loading = [
+  "flex",
+  "h-5/6",
+  "font-bold",
+  "text-6xl",
+  "text-center",
+  "justify-center",
+  "items-center",
 ];
 
 export const section = ["m-4", "p-4", "text-lg", "shadow-border"];
 
-export const breakSpace = ["m-4", "h-1", "rounded", "bg-txtSecondary"];
+export const breakSpace = ["h-1", "rounded", "bg-txtSecondary"];

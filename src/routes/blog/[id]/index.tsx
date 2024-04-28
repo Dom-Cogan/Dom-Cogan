@@ -3,6 +3,7 @@ import { useLocation } from "@builder.io/qwik-city";
 import * as styles from "../../../styleY";
 import { getBlogDocument, getSectionDocument } from "~/config";
 import Title from "../../../components/page/sections/title";
+import Loading from "~/components/loading";
 
 interface Section {
   id: string;
@@ -45,7 +46,7 @@ export default component$(() => {
 
   return (
     <div class={styles.paper}>
-      {blogPostStore.blogPost && (
+      {blogPostStore.blogPost ? (
         <>
           <Title text={blogPostStore.blogPost.title} />
           {blogPostStore.blogPost.sections.map((section) => (
@@ -67,6 +68,8 @@ export default component$(() => {
             </div>
           ))}
         </>
+      ) : (
+        <Loading message="Blog" />
       )}
     </div>
   );

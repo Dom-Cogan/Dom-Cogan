@@ -64,10 +64,12 @@ export const paragraph = [
 
 export const header = [
   "italic",
+  "m-2",
   "text-2xl",
   "text-center",
   "font-semibold",
   "text-align: center",
+  "shadow-border",
 ];
 
 export const loading = [
@@ -82,4 +84,4 @@ export const loading = [
 
 export const section = ["m-4", "p-4", "text-lg", "shadow-border"];
 
-export const breakSpace = ["h-1", "rounded", "bg-txtSecondary"];
+export const breakSpace = ["h-0.5", "m-2", "rounded", "bg-LIGHT-txtSecondary"];

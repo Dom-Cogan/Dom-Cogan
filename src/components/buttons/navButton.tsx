@@ -16,7 +16,7 @@ export default component$<buttonProps>((props) => {
     "rounded",
     "border-4",
     "items-center",
-    "border-txtPrimary",
+    "border-LIGHT-txtPrimary",
     "justify-center",
 
     //Hover Effects

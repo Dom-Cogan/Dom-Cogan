@@ -54,13 +54,13 @@ export default component$(() => {
               {section.pageSections.map((item) => (
                 <div
                   key={item.type}
-                  class={
+                  class={[
                     item.type === "header"
                       ? styles.header
                       : item.type === "break"
                         ? styles.breakSpace
-                        : ""
-                  }
+                        : "",
+                  ]}
                 >
                   {item.content}
                 </div>

@@ -1,22 +1,73 @@
-import { component$ } from "@builder.io/qwik";
-import { useLocation, type DocumentHead } from "@builder.io/qwik-city";
+import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
+import { useLocation } from "@builder.io/qwik-city";
+import * as styles from "../../../styleY";
+import { getBlogDocument, getSectionDocument } from "~/config";
+import Title from "../../../components/page/sections/title";
+
+interface Section {
+  id: string;
+  pageSections: { type: string; content: string }[];
+}
+
+interface BlogPost {
+  title: string;
+  sections: Section[];
+}
+
 export default component$(() => {
   const loc = useLocation();
-  const blogId = loc.params.id;
+  const urlPath = loc.params.id;
+
+  const blogPostStore = useStore<{ blogPost: BlogPost | null }>({
+    blogPost: null,
+  });
+
+  useVisibleTask$(async () => {
+    const blog = await getBlogDocument(urlPath);
+    const postSectionList = blog.Pagesections.map(
+      (section: any) => section.$id,
+    );
+    const sections = await Promise.all(
+      postSectionList.map(async (sectionId: any) => {
+        const sectionData = await getSectionDocument(sectionId);
+        return {
+          id: sectionData.$id,
+          pageSections: sectionData.pageSections,
+        };
+      }),
+    );
+
+    blogPostStore.blogPost = {
+      title: blog.title,
+      sections,
+    };
+  });
+
   return (
-    <>
-      <div>Single blog post </div>
-      <div>{blogId}</div>
-    </>
+    <div class={styles.paper}>
+      {blogPostStore.blogPost && (
+        <>
+          <Title text={blogPostStore.blogPost.title} />
+          {blogPostStore.blogPost.sections.map((section) => (
+            <div key={section.id} class={styles.section}>
+              {section.pageSections.map((item) => (
+                <div
+                  key={item.type}
+                  class={
+                    item.type === "header"
+                      ? styles.header
+                      : item.type === "break"
+                        ? styles.breakSpace
+                        : ""
+                  }
+                >
+                  {item.content}
+                </div>
+              ))}
+            </div>
+          ))}
+        </>
+      )}
+    </div>
   );
 });
-
-export const head: DocumentHead = {
-  title: "Welcome to Qwik",
-  meta: [
-    {
-      name: "description",
-      content: "Qwik site description",
-    },
-  ],
-};

@@ -50,6 +50,19 @@ export const base = [
   "justify-center",
 ];
 
+export const loading = [
+  "flex",
+  "h-5/6",
+  "font-bold",
+  "text-6xl",
+  "text-center",
+  "justify-center",
+  "items-center",
+];
+
+//Styling for indavidual page items
+export const section = ["m-4", "p-4", "text-lg", "shadow-border"];
+
 export const paragraph = [
   "flex",
   "cursor-default",
@@ -69,19 +82,20 @@ export const header = [
   "text-center",
   "font-semibold",
   "text-align: center",
-  "shadow-border",
+  "shadow-header",
 ];
-
-export const loading = [
-  "flex",
-  "h-5/6",
-  "font-bold",
-  "text-6xl",
-  "text-center",
-  "justify-center",
-  "items-center",
-];
-
-export const section = ["m-4", "p-4", "text-lg", "shadow-border"];
 
 export const breakSpace = ["h-0.5", "m-2", "rounded", "bg-LIGHT-txtSecondary"];
+
+export const navBtn = [
+  "m-3",
+  "flex",
+  "rounded",
+  "border-4",
+  "items-center",
+  "border-LIGHT-txtPrimary",
+  "justify-center",
+
+  //Hover Effects
+  "hover:bg-LIGHT-bgSecondary",
+];

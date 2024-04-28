@@ -49,7 +49,7 @@
     "wrangler": "^3.0.0"
   },
   "dependencies": {
-    "appwrite": "^14.0.1",
-    "edgedb": "^1.5.4"
+    "@clerk/clerk-js": "^5.1.1",
+    "appwrite": "^14.0.1"
   }
 }

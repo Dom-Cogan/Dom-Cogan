@@ -6,7 +6,7 @@ import * as styles from "../../styleY";
 export default component$(() => {
   return (
     <div class={styles.base}>
-      <h1 class={[styles.header, "text-6xl", "font-extrabold"]}>
+      <h1 class={["p-4", "text-center", "text-6xl", "font-extrabold"]}>
         Hello & Welcome
       </h1>
       <p class={styles.paragraph}>

@@ -1,6 +1,6 @@
 import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
-import { listAllBlog } from "~/config";
+import { listAllBlog } from "../../config/database";
 import Overview from "~/components/page/overview";
 import * as styles from "../../styleY";
 import Loading from "~/components/loading";
@@ -42,7 +42,7 @@ export default component$(() => {
           />
         ))
       ) : (
-        <Loading message="List of blogs" />
+        <Loading message="list of blogs" />
       )}
     </div>
   );

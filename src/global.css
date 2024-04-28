@@ -8,12 +8,11 @@
 
 :root {
   /* Dark mode colors*/
-  /*
-  --background: #00000a;
-  --bg-secondary: #000025;
-  --primary: #dcdcdc;
-  --txt-secondary: #cdcdcd;
-  */
+  --dark-background: #00000a;
+  --dark-bg-secondary: #000025;
+  --dark-primary: #dcdcdc;
+  --dark-txt-secondary: #cdcdcd;
+
   /* Light mode colors*/
   --background: #dcdcdc;
   --bg-secondary: #adacac;

@@ -1,4 +1,4 @@
-import { component$, Slot } from "@builder.io/qwik";
+import { $, component$, Slot } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import * as styleY from "../styleY";
 import Sidemenu from "~/components/columns/sidemenu";

@@ -16,12 +16,10 @@ export const rootPage = [
   "overflow-hidden",
   "scrollbar-hidden",
 ];
-
 export const page = [
+  "p-4",
   "flex",
-  "lg:p-8",
-  "lg:px-12",
-  "min-w-[300px]",
+  "mt-4",
   "w-full",
   "flex-col",
   "h-screen",
@@ -32,9 +30,8 @@ export const page = [
 ];
 
 export const paper = [
-  "p-1.5",
-  "md:p-4",
-  "h-full",
+  "m-8",
+  "mx-12",
   "max-w-2xl",
   "overflow-scroll",
   "scrollbar-hidden",
@@ -61,7 +58,6 @@ export const loading = [
 ];
 
 //Styling for indavidual page items
-export const section = ["m-4", "p-4", "text-lg", "shadow-border"];
 
 export const paragraph = [
   "flex",
@@ -76,16 +72,14 @@ export const paragraph = [
 ];
 
 export const header = [
-  "italic",
   "m-2",
+  "italic",
   "text-2xl",
   "text-center",
   "font-semibold",
-  "text-align: center",
   "shadow-header",
+  "text-align: center",
 ];
-
-export const breakSpace = ["h-0.5", "m-2", "rounded", "bg-LIGHT-txtSecondary"];
 
 export const navBtn = [
   "m-3",
@@ -99,3 +93,7 @@ export const navBtn = [
   //Hover Effects
   "hover:bg-LIGHT-bgSecondary",
 ];
+
+export const breakSpace = ["p-4", "h-1", "rounded", "bg-LIGHT-txtSecondary"];
+
+export const section = ["m-4", "p-4", "text-lg", "shadow-border"];

@@ -16,18 +16,18 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 
 export default component$(() => {
   //Styles for the main layout of the website
-  const leftcolumn = [
-    "hidden",
-    "md:flex",
+  const leftcolumn = ["sm:hidden md:flex"];
+  const container = ["flex", "w-4/5", "h-full", "m-4"];
+  const sidemenu = [
     "w-1/5",
+    "flex",
     "justify-end",
     "items-center",
-    "max-w-[70px]",
+    "sm:max-w-[70px]",
   ];
-  const container = ["flex", "w-4/5", "h-full", "m-4"];
   return (
     <div class={styleY.rootPage}>
-      <div class={leftcolumn}></div>
+      <div class={[sidemenu, leftcolumn]}></div>
       <div class={container}>
         <div class={styleY.page}>
           <Slot />

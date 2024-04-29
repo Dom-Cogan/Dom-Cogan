@@ -4,7 +4,6 @@ import Home from "~/icons/home";
 import Blog from "~/icons/blog";
 
 export default component$(() => {
-  const darkmode = useSignal(false);
   const account = useSignal(true);
   const sidemenu = [
     "w-1/5",
@@ -13,7 +12,6 @@ export default component$(() => {
     "justify-center",
     account.value ? "max-w-[70px]" : "w-3/5",
   ];
-  console.log(darkmode);
   return (
     <div class={sidemenu}>
       <div>

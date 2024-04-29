@@ -21,7 +21,7 @@ export default component$<buttonProps>((props) => {
     "border-box",
 
     //Hover Effects
-    "hover:bg-hover",
+    "hover:bg-LIGHT-bgSecondary",
   ];
 
   return (

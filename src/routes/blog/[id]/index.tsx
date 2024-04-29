@@ -3,7 +3,7 @@ import { useLocation } from "@builder.io/qwik-city";
 import * as styles from "../../../styleY";
 import { getBlogDocument, getSectionDocument } from "../../../config/database";
 import Title from "../../../components/page/sections/title";
-import Loading from "~/components/loading";
+import Loading from "../../../components/loading";
 
 interface Section {
   id: string;

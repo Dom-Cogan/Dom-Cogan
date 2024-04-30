@@ -2,7 +2,6 @@ import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { listAllBlog } from "../../config/database";
 import Overview from "~/components/page/overview";
-import * as styles from "../../styleY";
 import Loading from "../../components/loading";
 
 interface BlogPost {
@@ -31,7 +30,7 @@ export default component$(() => {
   });
 
   return (
-    <div class={styles.paper}>
+    <div>
       {blogPostsStore.blogPosts.length > 0 ? (
         blogPostsStore.blogPosts.map((post) => (
           <Overview

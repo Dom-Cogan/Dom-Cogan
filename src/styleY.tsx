@@ -94,6 +94,6 @@ export const navBtn = [
   "hover:bg-LIGHT-bgSecondary",
 ];
 
-export const breakSpace = ["m-4", "h-1", "rounded", "bg-LIGHT-txtSecondary"];
+export const breakSpace = ["m-4", "h-1", "rounded", "bg-txtSecondary"];
 
 export const section = ["m-4", "p-4", "text-lg", "shadow-border"];

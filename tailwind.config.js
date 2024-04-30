@@ -4,22 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        DARK: {
-          bgPrimary: "var(--dark-background)",
-          bgSecondary: "var(--dark-bg-secondary)",
-          txtPrimary: "var(--dark-primary)",
-          txtSecondary: "var(--dark-txt-secondary)",
-        },
-        LIGHT: {
-          bgPrimary: "var(--background)",
-          bgSecondary: "var(--bg-secondary)",
-          txtPrimary: "var(--primary)",
-          txtSecondary: "var(--txt-secondary)",
-        },
+        bgPrimary: "var(--background)",
+        bgSecondary: "var(--bg-secondary)",
+        txtPrimary: "var(--primary)",
+        txtSecondary: "var(--txt-secondary)",
       },
       boxShadow: {
         border: "4px 4px var(--primary), -4px -4px var(--primary)",
-        header: "0px 3px var(--primary), 0px -3px var(--primary)",
+      },
     },
   },
   plugins: [],

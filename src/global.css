@@ -1,26 +1,27 @@
-/*
-Tailwind CSS imports
-* View the full documentation at https://tailwindcss.com
-*/
+/**
+ * Tailwind CSS imports
+ * View the full documentation at https://tailwindcss.com
+ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Dark mode colors */
-  --dark-background: #00000a;
-  --dark-bg-secondary: #000025;
-  --dark-primary: #dcdcdc;
-  --dark-txt-secondary: #cdcdcd;
-
-  /* Light mode colors */
+  /* Dark mode colors*/
+  /*
+  --background: #00000a;
+  --bg-secondary: #000025;
+  --primary: #dcdcdc;
+  --txt-secondary: #cdcdcd;
+  */
+  /* Light mode colors*/
   --background: #dcdcdc;
   --bg-secondary: #adacac;
   --primary: #00000a;
   --txt-secondary: #000025;
 
   /*Joined Colors*/
-  --warning: bg-red-600;
+  --warning: "bg-red-600";
 
   /*Set default Colors*/
   background-color: var(--background);

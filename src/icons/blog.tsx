@@ -7,7 +7,7 @@ export default component$(() => {
       fill="none"
       viewBox="0 0 24 24"
       stroke-width="2"
-      class="stroke-LIGHT-txtPrimary h-9 w-9"
+      class="stroke-txtPrimary h-9 w-9"
     >
       <path
         stroke-linecap="round"

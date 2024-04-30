@@ -1,25 +1,34 @@
 import { component$ } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
-import * as styles from "../../styleY";
 
 interface buttonProps {
   icon: any;
   link?: string;
-  willNav?: boolean;
 }
 
 export default component$<buttonProps>((props) => {
   const nav = useNavigate();
+
+  //Styles for the nav buttons
+  const container = [
+    "m-3",
+    "flex",
+    "rounded",
+    "border-4",
+    "items-center",
+    "border-txtPrimary",
+    "justify-center",
+
+    //Hover Effects
+    "hover:bg-bgSecondary",
+  ];
+
   return (
     <div
-      class={styles.navBtn}
+      class={container}
       onClick$={() => {
         {
-          props.willNav
-            ? props.link
-              ? nav("/" + props.link)
-              : nav("/")
-            : console.log("Navigation: " + props.willNav);
+          props.link ? nav("/" + props.link) : nav("/");
         }
       }}
     >

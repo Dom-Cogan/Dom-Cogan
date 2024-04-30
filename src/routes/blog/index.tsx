@@ -1,8 +1,8 @@
 import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
-import { listAllBlog } from "../../config/database";
+import { listAllBlog } from "~/config";
 import Overview from "~/components/page/overview";
-import Loading from "../../components/loading";
+import * as styles from "../../styleY";
 
 interface BlogPost {
   id: string;
@@ -41,7 +41,7 @@ export default component$(() => {
           />
         ))
       ) : (
-        <Loading message="list of blogs" />
+        <div class={styles.construction}>Loading blog posts...</div>
       )}
     </div>
   );

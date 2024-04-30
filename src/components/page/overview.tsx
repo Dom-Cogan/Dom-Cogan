@@ -21,9 +21,11 @@ export default component$<DetailProps>((props) => {
     "flex",
     "flex-col",
     "max-w-sm",
+    "rounded-2xl",
     "cursor-pointer",
     props.bgColor ? props.bgColor : "bg-transparent",
-    "hover:bg-LIGHT-bgSecondary",
+    "hover:bg-hover",
+    "box-border",
     "shadow-border",
   ];
   const title = [

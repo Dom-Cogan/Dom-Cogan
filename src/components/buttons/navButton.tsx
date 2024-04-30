@@ -10,9 +10,6 @@ interface buttonProps {
 
 export default component$<buttonProps>((props) => {
   const nav = useNavigate();
-
-  //Styles for the nav buttons
-
   return (
     <div
       class={styles.navBtn}

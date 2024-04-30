@@ -20,7 +20,6 @@ export default {
       boxShadow: {
         border: "4px 4px var(--primary), -4px -4px var(--primary)",
         header: "0px 3px var(--primary), 0px -3px var(--primary)",
-      },
     },
   },
   plugins: [],

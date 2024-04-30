@@ -3,6 +3,8 @@ import { useLocation } from "@builder.io/qwik-city";
 import * as styles from "../../../styleY";
 import { getBlogDocument, getSectionDocument } from "~/config";
 import Title from "../../../components/page/sections/title";
+import Break from "~/components/page/sections/break";
+import Loading from "~/components/loading";
 
 interface Section {
   id: string;
@@ -45,7 +47,7 @@ export default component$(() => {
 
   return (
     <div class={styles.paper}>
-      {blogPostStore.blogPost && (
+      {blogPostStore.blogPost ? (
         <>
           <Title text={blogPostStore.blogPost.title} />
           {blogPostStore.blogPost.sections.map((section) => (
@@ -53,20 +55,16 @@ export default component$(() => {
               {section.pageSections.map((item) => (
                 <div
                   key={item.type}
-                  class={
-                    item.type === "header"
-                      ? styles.header
-                      : item.type === "break"
-                        ? styles.breakSpace
-                        : ""
-                  }
+                  class={[item.type === "header" ? styles.header : ""]}
                 >
-                  {item.content}
+                  {item.type === "break" ? <Break /> : item.content}
                 </div>
               ))}
             </div>
           ))}
         </>
+      ) : (
+        <Loading message="blog" />
       )}
     </div>
   );

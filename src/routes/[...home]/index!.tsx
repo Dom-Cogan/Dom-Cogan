@@ -12,7 +12,6 @@ export default component$(() => {
         learning new skills, I've taught myself Flutter, Qwik, Next.js, and CSS.
       </p>
       <div class={row}>
-        <PrimaryBtn text="Websites" link="websites" />
         <PrimaryBtn text="Blog" link="blog" />
       </div>
     </div>

@@ -21,15 +21,15 @@ export default component$<DetailProps>((props) => {
     "flex",
     "flex-col",
     "max-w-sm",
-    "rounded-2xl",
     "cursor-pointer",
     props.bgColor ? props.bgColor : "bg-transparent",
-    "hover:bg-hover",
+    "hover:bg-bgSecondary",
     "box-border",
     "shadow-border",
   ];
   const title = [
     "flex",
+    "m-1",
     "italic",
     "w-full",
     "text-2xl",
@@ -39,7 +39,7 @@ export default component$<DetailProps>((props) => {
     "justify-center",
     props.txColor ? props.txColor : "text-txPrimary",
   ];
-  const description = ["text-base", "mt-6", "select-none"];
+  const description = ["text-base", "mt-1", "select-none"];
 
   return (
     <div

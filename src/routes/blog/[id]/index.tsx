@@ -1,4 +1,4 @@
-import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useStore, useTask$ } from "@builder.io/qwik";
 import { useLocation } from "@builder.io/qwik-city";
 import * as styles from "../../../styleY";
 import { getBlogDocument, getSectionDocument } from "~/config";
@@ -24,8 +24,9 @@ export default component$(() => {
     blogPost: null,
   });
 
-  useVisibleTask$(async () => {
+  useTask$(async () => {
     const blog = await getBlogDocument(urlPath);
+    console.log(blog); // This logs the raw blog data
     const postSectionList = blog.Pagesections.map(
       (section: any) => section.$id,
     );
@@ -43,6 +44,9 @@ export default component$(() => {
       title: blog.title,
       sections,
     };
+
+    // Log the full blog post
+    console.log(blogPostStore.blogPost);
   });
 
   return (

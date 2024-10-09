@@ -1,8 +1,8 @@
-import { component$, useStore, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useStore, useTask$ } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { listAllBlog } from "~/config";
 import Overview from "~/components/page/overview";
-import * as styles from "../../styleY";
+import Loading from "~/components/loading";
 
 interface BlogPost {
   id: string;
@@ -15,7 +15,7 @@ export default component$(() => {
     blogPosts: [],
   });
 
-  useVisibleTask$(async () => {
+  useTask$(async () => {
     try {
       const response = await listAllBlog();
       const blogPosts = response?.documents.map((doc) => ({
@@ -41,7 +41,7 @@ export default component$(() => {
           />
         ))
       ) : (
-        <div class={styles.construction}>Loading blog posts...</div>
+        <Loading message="posts" />
       )}
     </div>
   );

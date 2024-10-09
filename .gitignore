@@ -5,6 +5,7 @@
 /server
 .env*
 /database
+/add
 
 # Development
 node_modules

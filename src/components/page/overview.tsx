@@ -42,15 +42,17 @@ export default component$<DetailProps>((props) => {
   const description = ["text-base", "mt-1", "select-none"];
 
   return (
-    <div
-      key={props.key}
-      class={background}
-      onClick$={() => nav("/blog/" + props.id)}
-    >
-      {props.image ? <div></div> : <></>}
-      <div>
-        <div class={title}>{props.title}</div>
-        <div class={description}>{props.description}</div>
+    <div class="p-2">
+      <div
+        key={props.key}
+        class={background}
+        onClick$={() => nav("/blog/" + props.id)}
+      >
+        {props.image ? <div></div> : <></>}
+        <div>
+          <div class={title}>{props.title}</div>
+          <div class={description}>{props.description}</div>
+        </div>
       </div>
     </div>
   );

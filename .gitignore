@@ -5,7 +5,9 @@
 /server
 .env*
 /database
-/add
+src/routes/add
+src/components/columns/createBlogSection.tsx
+src/components/columns/createSectionItem.tsx
 
 # Development
 node_modules

@@ -1,0 +1,1 @@
+import{a0 as l,a7 as n}from"./q-Bb4ORUjr.js";const x=t=>{const a=["m-4","p-2","text-5xl","bold","italic","text-center","shadow-border"],i=["m-4","font-semibold","text-2xl","italic","text-align: center","text-center"];return t.heading?l("div",{class:i},null,n(e=>e.text,[t]),3,"HN_0"):l("div",{class:a},null,n(e=>e.text,[t]),3,null)};export{x as s_BYJFogMmj5g};

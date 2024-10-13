@@ -48,7 +48,9 @@ export default component$<PromptProps>((props) => {
 
       // Update the item document with the new content
       updateItemDoc(props.sectionId, props.itemId, props.type, state.content);
-      props.onClicked();
+      {
+        props.onClicked;
+      }
     }
   });
 

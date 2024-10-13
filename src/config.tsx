@@ -188,7 +188,7 @@ export async function updateItemDoc(
     const updatedPageSections = sectionDoc.pageSections || [];
 
     const existingItemIndex = updatedPageSections.findIndex(
-      (section) => section.id === itemId,
+      (section: any) => section.id === itemId,
     );
 
     if (existingItemIndex > -1) {
@@ -237,7 +237,7 @@ export async function getBlogDocument(id: string) {
       id,
     );
     return response;
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === 404) {
       console.error("Blog document not found:", error);
       throw new Error("Blog document not found. Please check the ID.");
@@ -271,7 +271,7 @@ export async function getItemDocument(id: string) {
       id,
     );
     return response;
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === 404) {
       console.error(`Item with ID ${id} not found.`);
     } else {
@@ -306,7 +306,7 @@ export async function loginUser(email: string, password: string) {
   }
 }
 // Function to fetch image details
-export async function fetchImage(bucketId, fileId) {
+export async function fetchImage(bucketId: string, fileId: string) {
   try {
     const file = await storage.getFile(bucketId, fileId);
     return file; // This includes the URL and other metadata

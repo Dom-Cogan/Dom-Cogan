@@ -4,6 +4,7 @@ import placeholderImage from "/src/Images/ImageImg.png";
 interface ImageProps {
   imageSrc?: string; // Property for image source
   altText: string; // Property for image alt text
+  onClick$?: () => void; // Optional property for click event
 }
 
 export default component$<ImageProps>((props) => {
@@ -20,7 +21,9 @@ export default component$<ImageProps>((props) => {
   ].join(" ");
 
   return (
-    <div class={containerClasses}>
+    <div class={containerClasses} onClick$={props.onClick$}>
+      {" "}
+      {/* Add onClick$ here */}
       <img
         src={props.imageSrc ? props.imageSrc : placeholderImage}
         alt={props.altText}

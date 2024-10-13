@@ -1,4 +1,5 @@
 import { Client, Databases, ID, Account, Storage } from "appwrite";
+import { BlogDocument, SectionDocument, ItemDocument } from "./types";
 
 // Appwrite configuration
 export const appWriteConfig = {
@@ -19,35 +20,36 @@ client.setProject(appWriteConfig.projectId);
 client.setEndpoint(appWriteConfig.url);
 
 const storage = new Storage(client);
-
 export const account = new Account(client);
 const databases = new Databases(client);
 
 // Function to list all blogs
-export async function listAllBlog() {
+export async function listAllBlog(): Promise<{ documents: BlogDocument[] }> {
   try {
     const response = await databases.listDocuments(
       appWriteConfig.databasesId,
       appWriteConfig.blogCollectionId,
     );
-    return response;
+    return response as { documents: BlogDocument[] };
   } catch (error) {
     console.error("Error listing blogs:", error);
-    throw error; // Ensure errors are propagated
+    throw error;
   }
 }
 
-// Function to list all Items
-export async function listAllitems() {
+// Function to list all items
+export async function listAllItems(): Promise<{
+  documents: SectionDocument[];
+}> {
   try {
     const response = await databases.listDocuments(
       appWriteConfig.databasesId,
       appWriteConfig.sectionCollectionId,
     );
-    return response;
+    return response as { documents: SectionDocument[] }; // Type assertion
   } catch (error) {
-    console.error("Error listing blogs:", error);
-    throw error; // Ensure errors are propagated
+    console.error("Error listing items:", error);
+    throw error;
   }
 }
 
@@ -62,8 +64,8 @@ export async function createBlogDoc(
       appWriteConfig.blogCollectionId,
       ID.unique(),
       {
-        title: title,
-        overview: overview,
+        title,
+        overview,
         created: new Date().toISOString(),
         Pagesections: [], // Initialize the Pagesections array
       },
@@ -73,11 +75,11 @@ export async function createBlogDoc(
     return result.$id;
   } catch (error) {
     console.error("Error creating blog document:", error);
-    throw error; // Ensure errors are propagated
+    throw error;
   }
 }
 
-// Function to create a new section document with a title
+// Function to create a new section document
 export async function createSectionDoc(): Promise<string> {
   try {
     const result = await databases.createDocument(
@@ -85,23 +87,23 @@ export async function createSectionDoc(): Promise<string> {
       appWriteConfig.sectionCollectionId,
       ID.unique(),
       {
-        pageSections: [], // Initialize this according to your schema
+        pageSections: [], // Initialize according to your schema
       },
       ['read("any")'],
     );
     console.log("Section document created successfully:", result);
-    return result.$id; // Return the document ID
+    return result.$id;
   } catch (error) {
     console.error("Error creating section document:", error);
-    throw error; // Ensure errors are propagated
+    throw error;
   }
 }
 
 // Function to create a new item document
 export async function createItemDoc(
   itemType: string,
-  content?: string, // Optional alt text for image
-  imageURL?: string, // Optional image URL
+  content?: string,
+  imageURL?: string,
 ): Promise<string> {
   try {
     const result = await databases.createDocument(
@@ -110,8 +112,8 @@ export async function createItemDoc(
       ID.unique(),
       {
         type: itemType,
-        content: content, // Include content if applicable
-        imageURL: imageURL ? [imageURL] : [], // Include image URL if provided
+        content,
+        imageURL: imageURL ? [imageURL] : [],
       },
       ['read("any")'],
     );
@@ -127,9 +129,8 @@ export async function createItemDoc(
 export async function updateBlogSections(blogId: string, sectionIds: string[]) {
   try {
     const currentBlogDoc = await getBlogDocument(blogId);
-    const currentSections = currentBlogDoc.Pagesections || []; // Safely get current sections
+    const currentSections = currentBlogDoc.Pagesections || [];
 
-    // Combine current sections with new ones, ensuring unique IDs
     const updatedSections = Array.from(
       new Set([...currentSections, ...sectionIds]),
     );
@@ -138,42 +139,40 @@ export async function updateBlogSections(blogId: string, sectionIds: string[]) {
       appWriteConfig.databasesId,
       appWriteConfig.blogCollectionId,
       blogId,
-      {
-        Pagesections: updatedSections, // Update with the combined array of section IDs
-      },
+      { Pagesections: updatedSections },
     );
 
     console.log("Blog updated successfully with new sections.");
   } catch (error) {
     console.error("Error updating blog document:", error);
-  }
-}
-
-export async function updateSectionDoc(
-  sectionId: string,
-  itemId: string,
-): Promise<void> {
-  try {
-    const sectionDoc = await getSectionDocument(sectionId);
-    const updatedItemIds = sectionDoc.pageSections || []; // Use pageSections instead of items
-    updatedItemIds.push(itemId); // Add the new item ID
-
-    await databases.updateDocument(
-      appWriteConfig.databasesId,
-      appWriteConfig.sectionCollectionId,
-      sectionId,
-      {
-        pageSections: updatedItemIds, // Update the correct field
-      },
-    );
-    console.log("Section document updated successfully.");
-  } catch (error) {
-    console.error("Error updating section document:", error);
     throw error; // Ensure errors are propagated
   }
 }
 
 // Function to update a section document with new item IDs
+export async function updateSectionDoc(
+  sectionId: string,
+  itemId: string,
+): Promise<void> {
+  try {
+    const sectionDoc = (await getSectionDocument(sectionId)) as SectionDocument;
+    const updatedItemIds = sectionDoc.pageSections || [];
+    updatedItemIds.push(itemId);
+
+    await databases.updateDocument(
+      appWriteConfig.databasesId,
+      appWriteConfig.sectionCollectionId,
+      sectionId,
+      { pageSections: updatedItemIds },
+    );
+    console.log("Section document updated successfully.");
+  } catch (error) {
+    console.error("Error updating section document:", error);
+    throw error;
+  }
+}
+
+// Function to update a section document with new item details
 export async function updateItemDoc(
   sectionId: string,
   itemId: string,
@@ -182,13 +181,12 @@ export async function updateItemDoc(
   imageURL?: string,
 ): Promise<void> {
   try {
-    const sectionDoc = await getSectionDocument(sectionId);
+    const sectionDoc = (await getSectionDocument(sectionId)) as SectionDocument;
     console.log("Current section document:", sectionDoc);
 
     const updatedPageSections = sectionDoc.pageSections || [];
-
     const existingItemIndex = updatedPageSections.findIndex(
-      (section: any) => section.id === itemId,
+      (section: ItemDocument) => section.$id === itemId, // Use $id for consistency
     );
 
     if (existingItemIndex > -1) {
@@ -208,17 +206,11 @@ export async function updateItemDoc(
       });
     }
 
-    const updateData = {
-      pageSections: updatedPageSections,
-    };
-
-    console.log("Updating with data:", updateData);
-
     await databases.updateDocument(
       appWriteConfig.databasesId,
       appWriteConfig.sectionCollectionId,
       sectionId,
-      updateData,
+      { pageSections: updatedPageSections },
     );
 
     console.log("Section document updated successfully.");
@@ -229,55 +221,56 @@ export async function updateItemDoc(
 }
 
 // Function to get a specific blog document
-export async function getBlogDocument(id: string) {
+export async function getBlogDocument(id: string): Promise<BlogDocument> {
   try {
     const response = await databases.getDocument(
       appWriteConfig.databasesId,
       appWriteConfig.blogCollectionId,
       id,
     );
-    return response;
+    return response as BlogDocument;
   } catch (error: any) {
     if (error.code === 404) {
       console.error("Blog document not found:", error);
-      throw new Error("Blog document not found. Please check the ID.");
+      throw new Error("Blog document not found.");
     }
     console.error("Error getting blog document:", error);
-    throw error; // Propagate other errors
+    throw error;
   }
 }
 
 // Function to get a specific section document
-export async function getSectionDocument(id: string) {
+export async function getSectionDocument(id: string): Promise<SectionDocument> {
   try {
     const response = await databases.getDocument(
       appWriteConfig.databasesId,
       appWriteConfig.sectionCollectionId,
       id,
     );
-    return response;
+    return response as SectionDocument; // Type assertion
   } catch (error) {
     console.error("Error getting section document:", error);
-    throw error; // Ensure errors are propagated
+    throw error;
   }
 }
 
 // Function to get a specific item document
-export async function getItemDocument(id: string) {
+export async function getItemDocument(id: string): Promise<ItemDocument> {
   try {
     const response = await databases.getDocument(
       appWriteConfig.databasesId,
       appWriteConfig.itemCollectionId,
       id,
     );
-    return response;
+    return response as ItemDocument; // Type assertion
   } catch (error: any) {
     if (error.code === 404) {
       console.error(`Item with ID ${id} not found.`);
+      throw new Error(`Item with ID ${id} not found.`);
     } else {
       console.error("Error getting item document:", error);
+      throw error;
     }
-    throw error; // Ensure errors are propagated
   }
 }
 
@@ -286,7 +279,6 @@ export async function logAdminIn() {
   const adminEmail = import.meta.env.VITE_APPWRITE_ADMIN_EMAIL;
 
   const password = prompt("Enter your password:");
-
   if (!password) {
     throw new Error("Password is required.");
   }
@@ -302,9 +294,10 @@ export async function loginUser(email: string, password: string) {
     return result;
   } catch (error) {
     console.error("Login failed:", error);
-    throw error; // Ensure errors are propagated
+    throw error;
   }
 }
+
 // Function to fetch image details
 export async function fetchImage(bucketId: string, fileId: string) {
   try {
@@ -312,6 +305,6 @@ export async function fetchImage(bucketId: string, fileId: string) {
     return file; // This includes the URL and other metadata
   } catch (error) {
     console.error("Error fetching image:", error);
-    throw error; // Ensure errors are propagated
+    throw error;
   }
 }

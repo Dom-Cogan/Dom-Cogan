@@ -1,0 +1,1 @@
+import{a0 as e,a7 as i}from"./q-B3V1QaBI.js";const o=n=>e("div",{class:["mx-4","cursor-pointer","border-box","hover:bg-bgSecondary"],onClick$:n.onClicked},{style:{width:"100px",height:"50px"}},e("img",null,{src:i(t=>t.imageSrc,[n]),alt:i(t=>t.altText,[n]),height:"100",width:"100"},null,3,null),2,"5F_0");export{o as s_8IOXq1vAzyI};

@@ -18,12 +18,12 @@ export default component$(() => {
   useTask$(async () => {
     try {
       const response = await listAllBlog();
-      const blogPosts = response?.documents.map((doc) => ({
+      const blogPosts = response.documents.map((doc) => ({
         id: doc.$id,
         title: doc.title,
         overview: doc.overview,
       }));
-      blogPostsStore.blogPosts = blogPosts ?? [];
+      blogPostsStore.blogPosts = blogPosts;
     } catch (error) {
       console.error(error);
     }

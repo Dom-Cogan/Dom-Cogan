@@ -1,0 +1,1 @@
+import{a0 as l}from"./q-CvPXU0gL.js";import{b as s}from"./q-DYwUYD33.js";const a=()=>l("div",null,{class:["flex","justify-center"]},l("div",null,{class:s},null,3,null),3,"l0_0");export{a as s_GDRT3QzP3eQ};

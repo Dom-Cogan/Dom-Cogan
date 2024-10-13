@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Account } from "appwrite";
+import { Client, Databases, ID, Account, Storage } from "appwrite";
 
 // Appwrite configuration
 export const appWriteConfig = {
@@ -10,12 +10,15 @@ export const appWriteConfig = {
   sectionCollectionId: import.meta.env.VITE_APPWRITE_COL_SECTIONS_ID,
   projectsCollectionId: import.meta.env.VITE_APPWRITE_COL_PROJECTS_ID,
   devSessionKey: import.meta.env.VITE_APPWRITE_DEV_KEY,
+  portfolioBucketId: import.meta.env.VITE_APPWRITE_PORTFOLIO_BUCKET_ID,
 };
 
 // Initialize the Appwrite client
 const client = new Client();
 client.setProject(appWriteConfig.projectId);
 client.setEndpoint(appWriteConfig.url);
+
+const storage = new Storage(client);
 
 export const account = new Account(client);
 const databases = new Databases(client);
@@ -98,6 +101,7 @@ export async function createSectionDoc(): Promise<string> {
 export async function createItemDoc(
   itemType: string,
   content?: string, // Optional alt text for image
+  imageURL?: string, // Optional image URL
 ): Promise<string> {
   try {
     const result = await databases.createDocument(
@@ -107,6 +111,7 @@ export async function createItemDoc(
       {
         type: itemType,
         content: content, // Include content if applicable
+        imageURL: imageURL ? [imageURL] : [], // Include image URL if provided
       },
       ['read("any")'],
     );
@@ -172,29 +177,54 @@ export async function updateSectionDoc(
 export async function updateItemDoc(
   sectionId: string,
   itemId: string,
+  type: string,
+  content?: string,
+  imageURL?: string,
 ): Promise<void> {
   try {
     const sectionDoc = await getSectionDocument(sectionId);
-    const updatedItemIds = sectionDoc.items || [];
+    console.log("Current section document:", sectionDoc);
 
-    // Check if itemId already exists; if not, add it
-    if (!updatedItemIds.includes(itemId)) {
-      updatedItemIds.push(itemId); // Add the new item ID if it's not already in the array
+    const updatedPageSections = sectionDoc.pageSections || [];
+
+    const existingItemIndex = updatedPageSections.findIndex(
+      (section) => section.id === itemId,
+    );
+
+    if (existingItemIndex > -1) {
+      updatedPageSections[existingItemIndex] = {
+        ...updatedPageSections[existingItemIndex],
+        type,
+        content: content || updatedPageSections[existingItemIndex].content,
+        imageURL: imageURL
+          ? [imageURL]
+          : updatedPageSections[existingItemIndex].imageURL || [],
+      };
+    } else {
+      updatedPageSections.push({
+        type,
+        content,
+        imageURL: imageURL ? [imageURL] : [],
+      });
     }
+
+    const updateData = {
+      pageSections: updatedPageSections,
+    };
+
+    console.log("Updating with data:", updateData);
 
     await databases.updateDocument(
       appWriteConfig.databasesId,
       appWriteConfig.sectionCollectionId,
       sectionId,
-      {
-        items: updatedItemIds, // Update with the array of item IDs
-      },
+      updateData,
     );
 
     console.log("Section document updated successfully.");
   } catch (error) {
     console.error("Error updating section document:", error);
-    throw error; // Ensure errors are propagated
+    throw error;
   }
 }
 
@@ -272,6 +302,16 @@ export async function loginUser(email: string, password: string) {
     return result;
   } catch (error) {
     console.error("Login failed:", error);
+    throw error; // Ensure errors are propagated
+  }
+}
+// Function to fetch image details
+export async function fetchImage(bucketId, fileId) {
+  try {
+    const file = await storage.getFile(bucketId, fileId);
+    return file; // This includes the URL and other metadata
+  } catch (error) {
+    console.error("Error fetching image:", error);
     throw error; // Ensure errors are propagated
   }
 }

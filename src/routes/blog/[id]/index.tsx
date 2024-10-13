@@ -5,10 +5,23 @@ import { getBlogDocument, getSectionDocument } from "~/config";
 import Title from "../../../components/page/sections/title";
 import Break from "~/components/page/sections/break";
 import Loading from "~/components/loading";
+import ImageItem from "~/components/page/sections/imageItem";
+
+interface ImageSection {
+  type: "image"; // Optional, in case there's a description
+  imageURL: string[]; // This should be an array of image URLs
+}
+
+interface TextSection {
+  type: "header" | "paragraph" | "break"; // Add other text types as needed
+  content: string;
+}
+
+type PageSection = ImageSection | TextSection;
 
 interface Section {
   id: string;
-  pageSections: { type: string; content: string }[];
+  pageSections: PageSection[];
 }
 
 interface BlogPost {
@@ -56,12 +69,29 @@ export default component$(() => {
           <Title text={blogPostStore.blogPost.title} />
           {blogPostStore.blogPost.sections.map((section) => (
             <div key={section.id} class={styles.section}>
-              {section.pageSections.map((item) => (
+              {section.pageSections.map((item, index) => (
                 <div
-                  key={item.type}
+                  key={item.type + index} // Use a combination of item type and index
                   class={[item.type === "header" ? styles.header : ""]}
                 >
-                  {item.type === "break" ? <Break /> : item.content}
+                  {item.type === "break" ? (
+                    <Break />
+                  ) : item.type === "image" ? (
+                    (item as ImageSection).imageURL.map(
+                      (url: string) => (
+                        console.log(url),
+                        (
+                          <ImageItem
+                            key={url}
+                            altText="Image Item"
+                            imageSrc={url}
+                          />
+                        )
+                      ),
+                    )
+                  ) : (
+                    item.content
+                  )}
                 </div>
               ))}
             </div>

@@ -7,7 +7,7 @@ interface PromptProps {
   itemId: string;
   type: string;
   currentContent?: string;
-  onClicked: void;
+  onClicked: () => void; // Keep the correct type
 }
 
 export default component$<PromptProps>((props) => {
@@ -15,7 +15,7 @@ export default component$<PromptProps>((props) => {
     content: props.currentContent || "",
   });
 
-  const handleClick = $(() => {
+  const handleClick = $((props: any) => {
     let newContent;
 
     if (props.type === "image") {
@@ -48,9 +48,9 @@ export default component$<PromptProps>((props) => {
 
       // Update the item document with the new content
       updateItemDoc(props.sectionId, props.itemId, props.type, state.content);
-      {
-        props.onClicked;
-      }
+
+      // Call the onClicked function to notify the parent
+      props.onClicked(); // Invoke directly
     }
   });
 
@@ -60,10 +60,10 @@ export default component$<PromptProps>((props) => {
         <ImageItem
           imageSrc={state.content || ""}
           altText="Image Description"
-          onClick$={handleClick} // Trigger handleClick on image click
+          onClick$={$(() => handleClick)} // Trigger handleClick on image click
         />
       ) : (
-        <div onClick$={handleClick}>
+        <div onClick$={$(() => handleClick)}>
           {state.content || "Click to enter content"}
         </div>
       )}

@@ -1,5 +1,5 @@
 {
-  "manifestHash": "lcw21e",
+  "manifestHash": "k97wpe",
   "symbols": {
     "s_02wMImzEAbk": {
       "origin": "../node_modules/@builder.io/qwik-city/index.qwik.mjs",
@@ -392,8 +392,8 @@
       "ctxName": "component$",
       "captures": false,
       "loc": [
-        321,
-        1946
+        323,
+        1948
       ]
     },
     "s_dYNMARFI4QM": {
@@ -678,8 +678,8 @@
       "captures": true,
       "parent": "s_bvIm8DaPkU4",
       "loc": [
-        433,
-        1563
+        435,
+        1565
       ]
     },
     "s_jrr6ZNacYg4": {

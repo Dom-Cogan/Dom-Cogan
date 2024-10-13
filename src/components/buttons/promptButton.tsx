@@ -7,7 +7,7 @@ interface PromptProps {
   itemId: string;
   type: string;
   currentContent?: string;
-  onClicked: {};
+  onClicked: void;
 }
 
 export default component$<PromptProps>((props) => {

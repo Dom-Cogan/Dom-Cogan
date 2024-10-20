@@ -23,6 +23,23 @@ const storage = new Storage(client);
 export const account = new Account(client);
 const databases = new Databases(client);
 
+// Generic function to handle document retrieval
+async function getDocument<T>(collectionId: string, id: string): Promise<T> {
+  try {
+    const response = await databases.getDocument(
+      appWriteConfig.databasesId,
+      collectionId,
+      id,
+    );
+    return response as T;
+  } catch (error: any) {
+    if (error.code === 404) {
+      throw new Error(`${collectionId} document not found: ${id}`);
+    }
+    throw error;
+  }
+}
+
 // Function to list all blogs
 export async function listAllBlog(): Promise<{ documents: BlogDocument[] }> {
   try {
@@ -30,15 +47,17 @@ export async function listAllBlog(): Promise<{ documents: BlogDocument[] }> {
       appWriteConfig.databasesId,
       appWriteConfig.blogCollectionId,
     );
-    return response as { documents: BlogDocument[] };
+    return {
+      documents: response.documents as BlogDocument[],
+    };
   } catch (error) {
     console.error("Error listing blogs:", error);
     throw error;
   }
 }
 
-// Function to list all items
-export async function listAllItems(): Promise<{
+// Function to list all sections
+export async function listAllSections(): Promise<{
   documents: SectionDocument[];
 }> {
   try {
@@ -46,9 +65,11 @@ export async function listAllItems(): Promise<{
       appWriteConfig.databasesId,
       appWriteConfig.sectionCollectionId,
     );
-    return response as { documents: SectionDocument[] }; // Type assertion
+    return {
+      documents: response.documents as SectionDocument[],
+    };
   } catch (error) {
-    console.error("Error listing items:", error);
+    console.error("Error listing sections:", error);
     throw error;
   }
 }
@@ -67,11 +88,10 @@ export async function createBlogDoc(
         title,
         overview,
         created: new Date().toISOString(),
-        Pagesections: [], // Initialize the Pagesections array
+        Pagesections: [],
       },
       ['read("any")'],
     );
-    console.log("Blog document created successfully:", result);
     return result.$id;
   } catch (error) {
     console.error("Error creating blog document:", error);
@@ -87,11 +107,10 @@ export async function createSectionDoc(): Promise<string> {
       appWriteConfig.sectionCollectionId,
       ID.unique(),
       {
-        pageSections: [], // Initialize according to your schema
+        pageSections: [],
       },
       ['read("any")'],
     );
-    console.log("Section document created successfully:", result);
     return result.$id;
   } catch (error) {
     console.error("Error creating section document:", error);
@@ -117,7 +136,6 @@ export async function createItemDoc(
       },
       ['read("any")'],
     );
-    console.log("Item document created successfully:", result);
     return result.$id;
   } catch (error) {
     console.error("Error creating item document:", error);
@@ -128,24 +146,22 @@ export async function createItemDoc(
 // Function to update a blog document
 export async function updateBlogSections(blogId: string, sectionIds: string[]) {
   try {
-    const currentBlogDoc = await getBlogDocument(blogId);
-    const currentSections = currentBlogDoc.Pagesections || [];
-
-    const updatedSections = Array.from(
-      new Set([...currentSections, ...sectionIds]),
+    const currentBlogDoc = await getDocument<BlogDocument>(
+      appWriteConfig.blogCollectionId,
+      blogId,
     );
-
+    const updatedSections = Array.from(
+      new Set([...(currentBlogDoc.Pagesections || []), ...sectionIds]),
+    );
     await databases.updateDocument(
       appWriteConfig.databasesId,
       appWriteConfig.blogCollectionId,
       blogId,
       { Pagesections: updatedSections },
     );
-
-    console.log("Blog updated successfully with new sections.");
   } catch (error) {
     console.error("Error updating blog document:", error);
-    throw error; // Ensure errors are propagated
+    throw error;
   }
 }
 
@@ -155,65 +171,17 @@ export async function updateSectionDoc(
   itemId: string,
 ): Promise<void> {
   try {
-    const sectionDoc = (await getSectionDocument(sectionId)) as SectionDocument;
-    const updatedItemIds = sectionDoc.pageSections || [];
-    updatedItemIds.push(itemId);
-
+    const sectionDoc = await getDocument<SectionDocument>(
+      appWriteConfig.sectionCollectionId,
+      sectionId,
+    );
+    const updatedItemIds = [...(sectionDoc.pageSections || []), itemId];
     await databases.updateDocument(
       appWriteConfig.databasesId,
       appWriteConfig.sectionCollectionId,
       sectionId,
       { pageSections: updatedItemIds },
     );
-    console.log("Section document updated successfully.");
-  } catch (error) {
-    console.error("Error updating section document:", error);
-    throw error;
-  }
-}
-
-// Function to update a section document with new item details
-export async function updateItemDoc(
-  sectionId: string,
-  itemId: string,
-  type: string,
-  content?: string,
-  imageURL?: string,
-): Promise<void> {
-  try {
-    const sectionDoc = (await getSectionDocument(sectionId)) as SectionDocument;
-    console.log("Current section document:", sectionDoc);
-
-    const updatedPageSections = sectionDoc.pageSections || [];
-    const existingItemIndex = updatedPageSections.findIndex(
-      (section: ItemDocument) => section.$id === itemId, // Use $id for consistency
-    );
-
-    if (existingItemIndex > -1) {
-      updatedPageSections[existingItemIndex] = {
-        ...updatedPageSections[existingItemIndex],
-        type,
-        content: content || updatedPageSections[existingItemIndex].content,
-        imageURL: imageURL
-          ? [imageURL]
-          : updatedPageSections[existingItemIndex].imageURL || [],
-      };
-    } else {
-      updatedPageSections.push({
-        type,
-        content,
-        imageURL: imageURL ? [imageURL] : [],
-      });
-    }
-
-    await databases.updateDocument(
-      appWriteConfig.databasesId,
-      appWriteConfig.sectionCollectionId,
-      sectionId,
-      { pageSections: updatedPageSections },
-    );
-
-    console.log("Section document updated successfully.");
   } catch (error) {
     console.error("Error updating section document:", error);
     throw error;
@@ -222,67 +190,29 @@ export async function updateItemDoc(
 
 // Function to get a specific blog document
 export async function getBlogDocument(id: string): Promise<BlogDocument> {
-  try {
-    const response = await databases.getDocument(
-      appWriteConfig.databasesId,
-      appWriteConfig.blogCollectionId,
-      id,
-    );
-    return response as BlogDocument;
-  } catch (error: any) {
-    if (error.code === 404) {
-      console.error("Blog document not found:", error);
-      throw new Error("Blog document not found.");
-    }
-    console.error("Error getting blog document:", error);
-    throw error;
-  }
+  return await getDocument<BlogDocument>(appWriteConfig.blogCollectionId, id);
 }
 
 // Function to get a specific section document
 export async function getSectionDocument(id: string): Promise<SectionDocument> {
-  try {
-    const response = await databases.getDocument(
-      appWriteConfig.databasesId,
-      appWriteConfig.sectionCollectionId,
-      id,
-    );
-    return response as SectionDocument; // Type assertion
-  } catch (error) {
-    console.error("Error getting section document:", error);
-    throw error;
-  }
+  return await getDocument<SectionDocument>(
+    appWriteConfig.sectionCollectionId,
+    id,
+  );
 }
 
 // Function to get a specific item document
 export async function getItemDocument(id: string): Promise<ItemDocument> {
-  try {
-    const response = await databases.getDocument(
-      appWriteConfig.databasesId,
-      appWriteConfig.itemCollectionId,
-      id,
-    );
-    return response as ItemDocument; // Type assertion
-  } catch (error: any) {
-    if (error.code === 404) {
-      console.error(`Item with ID ${id} not found.`);
-      throw new Error(`Item with ID ${id} not found.`);
-    } else {
-      console.error("Error getting item document:", error);
-      throw error;
-    }
-  }
+  return await getDocument<ItemDocument>(appWriteConfig.itemCollectionId, id);
 }
 
 // Function to log in with just a password
 export async function logAdminIn() {
   const adminEmail = import.meta.env.VITE_APPWRITE_ADMIN_EMAIL;
-
   const password = prompt("Enter your password:");
   if (!password) {
     throw new Error("Password is required.");
   }
-
   return await loginUser(adminEmail, password);
 }
 
@@ -290,7 +220,6 @@ export async function logAdminIn() {
 export async function loginUser(email: string, password: string) {
   try {
     const result = await account.createEmailPasswordSession(email, password);
-    console.log("Login successful:", result);
     return result;
   } catch (error) {
     console.error("Login failed:", error);

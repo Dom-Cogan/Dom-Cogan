@@ -17,4 +17,5 @@ export interface ItemDocument {
   type: string;
   content?: string;
   imageURL?: string[];
+  src?: string[];
 }

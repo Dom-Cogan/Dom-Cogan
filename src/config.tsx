@@ -47,9 +47,17 @@ export async function listAllBlog(): Promise<{ documents: BlogDocument[] }> {
       appWriteConfig.databasesId,
       appWriteConfig.blogCollectionId,
     );
-    return {
-      documents: response.documents as BlogDocument[],
-    };
+
+    // Map response documents to BlogDocument type
+    const documents: BlogDocument[] = response.documents.map((doc: any) => ({
+      $id: doc.$id, // Ensure you have an ID
+      title: doc.title,
+      overview: doc.overview,
+      created: doc.created,
+      Pagesections: doc.Pagesections || [], // Default to empty array if undefined
+    }));
+
+    return { documents };
   } catch (error) {
     console.error("Error listing blogs:", error);
     throw error;
@@ -65,9 +73,14 @@ export async function listAllSections(): Promise<{
       appWriteConfig.databasesId,
       appWriteConfig.sectionCollectionId,
     );
-    return {
-      documents: response.documents as SectionDocument[],
-    };
+
+    // Map response documents to SectionDocument type
+    const documents: SectionDocument[] = response.documents.map((doc: any) => ({
+      $id: doc.$id, // Ensure you have an ID
+      pageSections: doc.pageSections || [], // Default to empty array if undefined
+    }));
+
+    return { documents };
   } catch (error) {
     console.error("Error listing sections:", error);
     throw error;
@@ -234,6 +247,38 @@ export async function fetchImage(bucketId: string, fileId: string) {
     return file; // This includes the URL and other metadata
   } catch (error) {
     console.error("Error fetching image:", error);
+    throw error;
+  }
+}
+
+// Function to update an item document
+export async function updateItemDoc(
+  itemId: string,
+  itemType: string,
+  content?: string,
+  imageURL?: string[],
+): Promise<void> {
+  try {
+    const updatedData: any = {
+      type: itemType,
+    };
+
+    if (content !== undefined) {
+      updatedData.content = content;
+    }
+
+    if (imageURL !== undefined) {
+      updatedData.imageURL = imageURL.length > 0 ? imageURL : [];
+    }
+
+    await databases.updateDocument(
+      appWriteConfig.databasesId,
+      appWriteConfig.itemCollectionId,
+      itemId,
+      updatedData,
+    );
+  } catch (error) {
+    console.error("Error updating item document:", error);
     throw error;
   }
 }

@@ -1,10 +1,9 @@
-// types.ts
 export interface BlogDocument {
   $id: string;
   title: string;
   overview: string;
   created: string;
-  Pagesections: string[]; // Assuming this is an array of section IDs
+  Pagesections: string[]; // Array of section IDs
 }
 
 export interface SectionDocument {
